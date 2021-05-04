@@ -1,18 +1,16 @@
 package io.github.turskyi.assetsexample
 
-import android.content.res.AssetManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import io.github.turskyi.assetsexample.databinding.ActivityMainBinding
 import java.io.IOException
-
+import java.io.InputStream
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showWhatInAssets()
@@ -35,19 +33,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun initView() {
-        et1.typeface = Typeface.createFromAsset(assets, "fonts/friday_stroke.otf")
-        et2.typeface = Typeface.createFromAsset(assets, "fonts/metal_shard.ttf");
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        binding.et1.typeface = Typeface.createFromAsset(assets, "fonts/friday_stroke.otf")
+        binding.et2.typeface = Typeface.createFromAsset(assets, "fonts/metal_shard.ttf")
         loadImageFromAsset()
     }
 
     private fun loadImageFromAsset() {
         try {
             /* get the input stream */
-            val ims = assets.open("images/cat.jpg")
+            val inputStream: InputStream = assets.open("images/cat.jpg")
             /* load as Drawable */
-            val d = Drawable.createFromStream(ims, null)
+            val drawable:Drawable = Drawable.createFromStream(inputStream, null)
             /* display the image in ImageView */
-            mImage.setImageDrawable(d)
+            binding.mImage.setImageDrawable(drawable)
         } catch (ex: IOException) {
             return
         }
